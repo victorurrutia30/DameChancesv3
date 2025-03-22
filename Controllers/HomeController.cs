@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using DameChanceSV2.Models;
 using DameChanceSV2.DAL;
+using DameChanceSV2.Utilities;
 
 namespace DameChanceSV2.Controllers
 {
@@ -38,19 +39,12 @@ namespace DameChanceSV2.Controllers
         [HttpGet]
         public IActionResult AdminDashboard()
         {
-            // 1) Verificar si es Admin
             if (!EsAdmin()) return NotFound();
 
-            // Bloque 2: Obtener contadores
             var (total, verificados, noVerificados, admins) = _usuarioDAL.GetUserCounts();
-
-            // Bloque 1: Obtener listado de usuarios
             var listaUsuarios = _usuarioDAL.GetAllUsuarios();
-
-            // Bloque 3: Obtener cuentas sin verificar hace mas de 3 dias
             int sinVerificarMas3Dias = _usuarioDAL.GetUnverifiedCountOlderThan3Days();
 
-            // Pasar datos a la vista con ViewBag o ViewModel
             ViewBag.Total = total;
             ViewBag.Verificados = verificados;
             ViewBag.NoVerificados = noVerificados;
@@ -77,12 +71,11 @@ namespace DameChanceSV2.Controllers
 
             if (ModelState.IsValid)
             {
-                // Si deseas hashear la contraseña, descomenta la siguiente línea
-                // model.Contrasena = PasswordHelper.HashPassword(model.Contrasena);
-
+                model.Contrasena = PasswordHelper.HashPassword(model.Contrasena);
                 _usuarioDAL.InsertUsuario(model);
                 return RedirectToAction("AdminDashboard");
             }
+
             return View(model);
         }
 
@@ -97,6 +90,7 @@ namespace DameChanceSV2.Controllers
             {
                 return NotFound();
             }
+
             return View(usuario);
         }
 
@@ -109,9 +103,20 @@ namespace DameChanceSV2.Controllers
 
             if (ModelState.IsValid)
             {
+                // Recuperar la contraseña original del usuario
+                var usuarioOriginal = _usuarioDAL.GetUsuarioById(model.Id);
+                if (usuarioOriginal != null)
+                {
+                    model.Contrasena = usuarioOriginal.Contrasena;
+                }
+
                 _usuarioDAL.UpdateUsuario(model);
                 return RedirectToAction("AdminDashboard");
             }
+
+            var allErrors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+            ViewBag.Errors = allErrors;
+
             return View(model);
         }
 
@@ -126,6 +131,7 @@ namespace DameChanceSV2.Controllers
             {
                 return NotFound();
             }
+
             return View(usuario);
         }
 
@@ -141,23 +147,19 @@ namespace DameChanceSV2.Controllers
         }
 
         // =====================================
-        // MÉTODO PRIVADO DE CHEQUEO
+        // MÉTODO PRIVADO DE CHEQUEO DE ADMIN
         // =====================================
         private bool EsAdmin()
         {
-            // Verificar si existe cookie de sesión
             var userSession = Request.Cookies["UserSession"];
             if (string.IsNullOrEmpty(userSession)) return false;
 
-            // Verificar si la cookie es un int válido
             if (!int.TryParse(userSession, out int userId)) return false;
 
-            // Buscar el usuario en la BD
             var user = _usuarioDAL.GetUsuarioById(userId);
             if (user == null) return false;
 
-            // RolId=1 => Admin
-            return (user.RolId == 1);
+            return (user.RolId == 1); // Rol 1 = Admin
         }
     }
 }

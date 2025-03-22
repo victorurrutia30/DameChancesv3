@@ -64,7 +64,7 @@ namespace DameChanceSV2.Controllers
                 string token = Guid.NewGuid().ToString();
                 EmailVerificationTokens[token] = nuevoId;
 
-                // Generar enlace de verificación (asegúrate de que el Request.Scheme sea "https" en producción).
+                // Generar enlace de verificación.
                 var verificationLink = Url.Action("VerificarCuenta", "Account", new { token = token }, Request.Scheme);
 
                 // Enviar correo de verificación.
@@ -76,7 +76,7 @@ namespace DameChanceSV2.Controllers
 
                 _emailService.SendEmail(model.Correo, subject, body);
 
-                // Mostrar una vista informativa o mensaje de que se ha enviado el correo.
+                // Mostrar vista informativa.
                 ViewBag.Message = "Registro exitoso. Se ha enviado un correo de verificación a tu dirección.";
                 return View("Informacion");
             }
@@ -97,7 +97,7 @@ namespace DameChanceSV2.Controllers
             // Actualizar el estado del usuario a verificado (true).
             _usuarioDAL.UpdateEstado(usuarioId, true);
 
-            // Eliminar el token ya que no es necesario.
+            // Eliminar el token.
             EmailVerificationTokens.Remove(token);
 
             ViewBag.Message = "Cuenta verificada con éxito. Ahora puedes iniciar sesión.";
@@ -134,16 +134,16 @@ namespace DameChanceSV2.Controllers
                         Expires = DateTime.Now.AddMinutes(30)
                     };
                     Response.Cookies.Append("UserSession", usuario.Id.ToString(), options);
+                    // Establecer también la cookie del rol.
+                    Response.Cookies.Append("UserRole", usuario.RolId.ToString(), options);
 
-                    // Redirigir según rol
+                    // Redirigir según rol.
                     if (usuario.RolId == 1)
                     {
-                        // Redirige a Dashboard admin
                         return RedirectToAction("AdminDashboard", "Home");
                     }
                     else
                     {
-                        // Redirige a Dashboard normal
                         return RedirectToAction("Dashboard", "Home");
                     }
                 }
@@ -156,6 +156,7 @@ namespace DameChanceSV2.Controllers
         public IActionResult Logout()
         {
             Response.Cookies.Delete("UserSession");
+            Response.Cookies.Delete("UserRole");
             return RedirectToAction("Login");
         }
 
@@ -176,16 +177,14 @@ namespace DameChanceSV2.Controllers
                 var usuario = _usuarioDAL.GetUsuarioByCorreo(model.Correo);
                 if (usuario != null)
                 {
-                    // Generar token para recuperación
+                    // Generar token para recuperación.
                     string token = Guid.NewGuid().ToString();
-
-                    // Guardar el token en el diccionario junto con el ID del usuario
                     PasswordResetTokens[token] = usuario.Id;
 
-                    // Generar el enlace de reseteo con el token
+                    // Generar enlace de reseteo.
                     var resetLink = Url.Action("ResetPassword", "Account", new { token = token }, Request.Scheme);
 
-                    // Construir asunto y cuerpo del correo
+                    // Construir asunto y cuerpo del correo.
                     string subject = "Recuperación de contraseña - DameChance";
                     string body = $@"
                         <p>Hola {usuario.Nombre},</p>
@@ -194,7 +193,6 @@ namespace DameChanceSV2.Controllers
                         <p><a href='{resetLink}'>Recuperar Contraseña</a></p>
                         <p>Si no solicitaste este cambio, puedes ignorar este mensaje.</p>";
 
-                    // Enviar el correo
                     _emailService.SendEmail(usuario.Correo, subject, body);
 
                     ViewBag.Message = "Se ha enviado un enlace de recuperación a tu correo.";
@@ -233,7 +231,6 @@ namespace DameChanceSV2.Controllers
                 return View();
             }
 
-            // Validar que el token exista en el diccionario
             if (!PasswordResetTokens.ContainsKey(token))
             {
                 ModelState.AddModelError("", "El token es inválido o ha expirado.");
@@ -241,19 +238,11 @@ namespace DameChanceSV2.Controllers
                 return View("ResetPassword");
             }
 
-            // Obtener el ID del usuario asociado al token
             int userId = PasswordResetTokens[token];
-
-            // Hashear la nueva contraseña
             string hashed = PasswordHelper.HashPassword(nuevaContrasena);
-
-            // Actualizar la contraseña en la BD
             _usuarioDAL.UpdateContrasena(userId, hashed);
-
-            // Eliminar el token para que no pueda reutilizarse
             PasswordResetTokens.Remove(token);
 
-            // Redirigir al login
             return RedirectToAction("Login");
         }
     }
