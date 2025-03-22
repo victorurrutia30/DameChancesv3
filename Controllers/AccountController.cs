@@ -13,6 +13,7 @@ namespace DameChanceSV2.Controllers
     {
         private readonly UsuarioDAL _usuarioDAL;
         private readonly IEmailService _emailService;
+        private readonly PerfilDeUsuarioDAL _perfilDeUsuarioDAL;
 
         // Diccionario para almacenar temporalmente los tokens de verificación (para demo).
         private static Dictionary<string, int> EmailVerificationTokens = new Dictionary<string, int>();
@@ -20,10 +21,11 @@ namespace DameChanceSV2.Controllers
         // Diccionario para almacenar tokens de reseteo de contraseña (para demo).
         private static Dictionary<string, int> PasswordResetTokens = new Dictionary<string, int>();
 
-        public AccountController(UsuarioDAL usuarioDAL, IEmailService emailService)
+        public AccountController(UsuarioDAL usuarioDAL, IEmailService emailService, PerfilDeUsuarioDAL perfilDeUsuarioDAL)
         {
             _usuarioDAL = usuarioDAL;
             _emailService = emailService;
+            _perfilDeUsuarioDAL = perfilDeUsuarioDAL;
         }
 
         // GET: /Account/Registro
@@ -137,6 +139,18 @@ namespace DameChanceSV2.Controllers
                     // Establecer también la cookie del rol.
                     Response.Cookies.Append("UserRole", usuario.RolId.ToString(), options);
 
+                    // Verificar si tiene un perfil
+                    if (usuario.RolId != 1)
+                    {
+                        var perfil = _perfilDeUsuarioDAL.GetPerfilByUsuarioId(usuario.Id);
+                        if (perfil == null)
+                        {
+                            // Redirige al formulario de completar perfil
+                            return RedirectToAction("CompletarPerfil", "Account");
+                        }
+                    }
+
+
                     // Redirigir según rol.
                     if (usuario.RolId == 1)
                     {
@@ -245,5 +259,94 @@ namespace DameChanceSV2.Controllers
 
             return RedirectToAction("Login");
         }
+
+        // GET: /Account/CompletarPerfil
+        [HttpGet]
+        public IActionResult CompletarPerfil()
+        {
+            // Solo permitir si está logueado
+            var userSession = Request.Cookies["UserSession"];
+            if (string.IsNullOrEmpty(userSession))
+            {
+                return RedirectToAction("Login");
+            }
+
+            return View();
+        }
+
+        // POST: /Account/CompletarPerfil
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult CompletarPerfil(CompletarPerfilViewModel model)
+        {
+            var userSession = Request.Cookies["UserSession"];
+            if (string.IsNullOrEmpty(userSession))
+            {
+                return RedirectToAction("Login");
+            }
+
+            if (!int.TryParse(userSession, out int userId))
+            {
+                return RedirectToAction("Login");
+            }
+
+            if (ModelState.IsValid)
+            {
+                // Guardar el perfil en la base de datos
+                var perfilExistente = _perfilDeUsuarioDAL.GetPerfilByUsuarioId(userId);
+                string rutaImagen = null;
+
+                // Manejo de la imagen, si el usuario subió algo
+                if (model.ImagenPerfil != null && model.ImagenPerfil.Length > 0)
+                {
+                    // Nombre único para el archivo
+                    string nombreArchivo = Guid.NewGuid().ToString() + System.IO.Path.GetExtension(model.ImagenPerfil.FileName);
+                    string carpeta = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "perfiles");
+                    string rutaFisica = Path.Combine(carpeta, nombreArchivo);
+
+                    using (var stream = new FileStream(rutaFisica, FileMode.Create))
+                    {
+                        model.ImagenPerfil.CopyTo(stream);
+                    }
+
+                    // Guardar la ruta relativa para la BD
+                    rutaImagen = Path.Combine("images", "perfiles", nombreArchivo).Replace("\\", "/");
+                }
+
+                if (perfilExistente == null)
+                {
+                    // Crear nuevo perfil
+                    PerfilDeUsuario nuevoPerfil = new PerfilDeUsuario
+                    {
+                        UsuarioId = userId,
+                        Edad = model.Edad,
+                        Genero = model.Genero,
+                        Intereses = model.Intereses,
+                        Ubicacion = model.Ubicacion,
+                        ImagenPerfil = rutaImagen
+                    };
+                    _perfilDeUsuarioDAL.InsertPerfil(nuevoPerfil);
+                }
+                else
+                {
+                    // Actualizar perfil existente
+                    perfilExistente.Edad = model.Edad;
+                    perfilExistente.Genero = model.Genero;
+                    perfilExistente.Intereses = model.Intereses;
+                    perfilExistente.Ubicacion = model.Ubicacion;
+                    if (!string.IsNullOrEmpty(rutaImagen))
+                    {
+                        perfilExistente.ImagenPerfil = rutaImagen;
+                    }
+                    _perfilDeUsuarioDAL.UpdatePerfil(perfilExistente);
+                }
+
+                // Una vez completado el perfil, redirigir al Dashboard de usuario común
+                return RedirectToAction("Dashboard", "Home");
+            }
+
+            return View(model);
+        }
+
     }
 }

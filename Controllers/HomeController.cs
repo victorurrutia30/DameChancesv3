@@ -161,5 +161,12 @@ namespace DameChanceSV2.Controllers
 
             return (user.RolId == 1); // Rol 1 = Admin
         }
+
+        [HttpGet]
+        public IActionResult Dashboard()
+        {
+            // Aquí podrías hacer consultas a la base de datos, cargar datos, etc.
+            return View();
+        }
     }
 }

@@ -1,0 +1,65 @@
+﻿@model DameChanceSV2.Models.CompletarPerfilViewModel
+
+@{
+    ViewData["Title"] = "Completa tu Perfil";
+}
+
+<div class="perfil-wrapper d-flex justify-content-center align-items-center">
+    <div class="perfil-card">
+        <h2 class="text-center mb-4"><i class="bi bi-person-circle me-2"></i> Completa tu Perfil</h2>
+
+        <form asp-action="CompletarPerfil" method="post" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+
+            <!-- Edad -->
+            <div class="mb-3">
+                <label asp-for="Edad" class="form-label"><i class="bi bi-calendar2-heart me-1"></i> Edad</label>
+                <input asp-for="Edad" class="form-control input-custom" type="number" min="18" />
+                <span asp-validation-for="Edad" class="text-danger small"></span>
+            </div>
+
+            <!-- Género -->
+            <div class="mb-3">
+                <label asp-for="Genero" class="form-label"><i class="bi bi-gender-ambiguous me-1"></i> Género</label>
+                <select asp-for="Genero" class="form-select input-custom">
+                    <option value="">Selecciona...</option>
+                    <option value="Masculino">Masculino</option>
+                    <option value="Femenino">Femenino</option>
+                    <option value="Otro">Otro</option>
+                </select>
+                <span asp-validation-for="Genero" class="text-danger small"></span>
+            </div>
+
+            <!-- Intereses -->
+            <div class="mb-3">
+                <label asp-for="Intereses" class="form-label"><i class="bi bi-stars me-1"></i> Intereses</label>
+                <textarea asp-for="Intereses" class="form-control input-custom" rows="3" placeholder="Escribe tus gustos, pasatiempos o temas que te apasionen..."></textarea>
+                <span asp-validation-for="Intereses" class="text-danger small"></span>
+            </div>
+
+            <!-- Ubicación -->
+            <div class="mb-3">
+                <label asp-for="Ubicacion" class="form-label"><i class="bi bi-geo-alt-fill me-1"></i> Ubicación</label>
+                <input asp-for="Ubicacion" class="form-control input-custom" type="text" placeholder="Ej: San Salvador, El Salvador" />
+                <span asp-validation-for="Ubicacion" class="text-danger small"></span>
+            </div>
+
+            <!-- Imagen de Perfil -->
+            <div class="mb-4">
+                <label asp-for="ImagenPerfil" class="form-label"><i class="bi bi-image me-1"></i> Foto de Perfil</label>
+                <input asp-for="ImagenPerfil" class="form-control input-custom" type="file" accept="image/*" />
+                <span asp-validation-for="ImagenPerfil" class="text-danger small"></span>
+            </div>
+
+            <div class="d-grid">
+                <button type="submit" class="btn btn-profile-save">
+                    <i class="bi bi-person-check-fill me-1"></i> Guardar Perfil
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

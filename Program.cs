@@ -14,6 +14,8 @@ namespace DameChanceSV2
 
             builder.Services.AddSingleton<Database>();
             builder.Services.AddTransient<UsuarioDAL>();
+            builder.Services.AddTransient<PerfilDeUsuarioDAL>();
+
 
             // Registro del servicio de correo.
             builder.Services.AddTransient<IEmailService, EmailService>();

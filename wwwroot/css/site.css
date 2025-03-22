@@ -698,3 +698,130 @@ border: none;
 background-color: #8bc4f0;
 color: #2c2c2c;
 }
+
+
+/*======Completar perfil============*/
+
+.perfil-wrapper {
+    min-height: 85vh;
+    background-color: #F2F2F2;
+    padding: 2rem;
+}
+
+.perfil-card {
+    background-color: #FFFFFF;
+    padding: 2.5rem 2rem;
+    border-radius: 20px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    width: 100%;
+}
+
+.input-custom {
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    padding: 0.6rem 1rem;
+    font-size: 1rem;
+}
+
+.btn-profile-save {
+    background-color: #E94E77;
+    color: #FFFFFF;
+    font-weight: 600;
+    border-radius: 30px;
+    padding: 0.6rem 1.5rem;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+    .btn-profile-save:hover {
+        background-color: #d53a65;
+        color: white;
+    }
+
+
+
+/*===========dashboard user===============*/
+/* Layout General */
+.user-dashboard-layout {
+    min-height: 100vh;
+    background-color: #F4F4F9;
+}
+
+/* Sidebar */
+.user-sidebar {
+    width: 220px;
+    background-color: #9B89B3;
+    padding-top: 2rem;
+    border-top-right-radius: 30px;
+    border-bottom-right-radius: 30px;
+}
+
+    .user-sidebar .nav-item {
+        font-size: 1rem;
+        padding: 0.5rem 0;
+        cursor: pointer;
+        transition: color 0.3s ease;
+    }
+
+        .user-sidebar .nav-item:hover {
+            color: #FFDDC1;
+        }
+
+/* Banner de bienvenida */
+.user-welcome-banner {
+    background: linear-gradient(135deg, #E94E77 0%, #FF69B4 100%);
+    color: white;
+    border-radius: 30px;
+    margin: 0 2rem;
+}
+
+/* Cards de match */
+.match-card {
+    border-radius: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+}
+
+    .match-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1);
+    }
+
+    .match-card .card-title {
+        font-weight: 600;
+        font-size: 1.2rem;
+        color: #4A4A4A;
+    }
+
+    .match-card .btn-match {
+        background-color: #E94E77;
+        color: white;
+        border-radius: 30px;
+        font-weight: 600;
+        transition: background-color 0.3s ease;
+    }
+
+        .match-card .btn-match:hover {
+            background-color: #d53a65;
+        }
+
+/* Sección explorar más */
+.user-explore-more {
+    background-color: #FFFFFF;
+    border-radius: 20px;
+    margin: 2rem 2rem 4rem 2rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* Ajuste responsive */
+@media (max-width: 768px) {
+    .user-sidebar {
+        display: none !important;
+    }
+
+    .user-welcome-banner,
+    .user-explore-more {
+        margin: 1rem;
+    }
+}

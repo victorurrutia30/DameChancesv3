@@ -37,9 +37,10 @@
                 <a class="navbar-brand d-flex align-items-center"
                    asp-area=""
                    asp-controller="Home"
-                   asp-action="@(string.IsNullOrEmpty(userSession) ? "Index" : (userRole == 1 ? "AdminDashboard" : "Index"))">
+                   asp-action="@(string.IsNullOrEmpty(userSession) ? "Index" : (userRole == 1 ? "AdminDashboard" : "Dashboard"))">
                     <i class="bi bi-heart-fill me-2 brand-icon"></i> <span>DameChanceSV</span>
                 </a>
+
 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
                         aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -66,15 +67,13 @@
                             }
                             else
                             {
-                                <!-- Usuario normal: Mostrar Inicio -->
+                                <!-- Usuario normal: Mostrar Dashboard -->
                                 <li class="nav-item">
-                                    <a class="nav-link active" asp-area="" asp-controller="Home" asp-action="Index">Inicio</a>
+                                    <a class="nav-link active" asp-area="" asp-controller="Home" asp-action="Dashboard">Inicio</a>
                                 </li>
                             }
                         }
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacidad</a>
-                        </li>
+
                     </ul>
 
                     <ul class="navbar-nav">
@@ -129,11 +128,6 @@
                             <li>
                                 <a asp-controller="Home" asp-action="Index">
                                     <i class="bi bi-house-door"></i> Inicio
-                                </a>
-                            </li>
-                            <li>
-                                <a asp-controller="Home" asp-action="Privacy">
-                                    <i class="bi bi-shield-lock"></i> Privacidad
                                 </a>
                             </li>
                             <li>
