@@ -1,0 +1,57 @@
+﻿@model DameChanceSV2.Models.Usuario
+
+@{
+    ViewData["Title"] = "Crear Usuario";
+}
+
+<div class="createuser-wrapper d-flex justify-content-center align-items-center">
+    <div class="createuser-card">
+        <h2 class="text-center mb-4"><i class="bi bi-person-plus-fill me-2"></i> Crear Nuevo Usuario</h2>
+
+        <form asp-action="CreateUser" method="post">
+
+            <!-- Nombre -->
+            <div class="form-group mb-3">
+                <label class="form-label"><i class="bi bi-person-fill me-1"></i>Nombre completo</label>
+                <input type="text" name="Nombre" class="form-control input-custom" required />
+            </div>
+
+            <!-- Correo -->
+            <div class="form-group mb-3">
+                <label class="form-label"><i class="bi bi-envelope me-1"></i>Correo electrónico</label>
+                <input type="email" name="Correo" class="form-control input-custom" required />
+            </div>
+
+            <!-- Contraseña -->
+            <div class="form-group mb-3">
+                <label class="form-label"><i class="bi bi-key-fill me-1"></i>Contraseña</label>
+                <input type="text" name="Contrasena" class="form-control input-custom" required />
+            </div>
+
+            <!-- Rol -->
+            <div class="form-group mb-3">
+                <label class="form-label"><i class="bi bi-person-badge me-1"></i>Rol (1=Admin, 2=Usuario)</label>
+                <input type="number" name="RolId" class="form-control input-custom" value="2" min="1" required />
+            </div>
+
+            <!-- Estado -->
+            <div class="form-group mb-4">
+                <label class="form-label d-block"><i class="bi bi-patch-check-fill me-1"></i>Estado</label>
+                <div class="form-check form-switch">
+                    <input type="checkbox" class="form-check-input" name="Estado" value="true" id="estadoSwitch" />
+                    <label class="form-check-label" for="estadoSwitch">Marcar si está verificado</label>
+                </div>
+            </div>
+
+            <!-- Botones -->
+            <div class="d-flex justify-content-between">
+                <button type="submit" class="btn btn-create">
+                    <i class="bi bi-save-fill me-1"></i> Guardar
+                </button>
+                <a asp-action="AdminDashboard" class="btn btn-cancel">
+                    <i class="bi bi-x-circle me-1"></i> Cancelar
+                </a>
+            </div>
+        </form>
+    </div>
+</div>

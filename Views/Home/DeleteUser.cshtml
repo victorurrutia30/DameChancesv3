@@ -1,0 +1,26 @@
+﻿@model DameChanceSV2.Models.Usuario
+
+@{
+    ViewData["Title"] = "Eliminar Usuario";
+}
+
+<div class="deleteuser-wrapper d-flex justify-content-center align-items-center">
+    <div class="deleteuser-card text-center">
+        <i class="bi bi-exclamation-triangle-fill delete-icon mb-3"></i>
+        <h2 class="mb-3 text-danger">Eliminar Usuario</h2>
+
+        <div class="alert alert-danger">
+            <p>¿Estás seguro de que deseas eliminar al usuario <strong>@Model.Nombre</strong> con ID <strong>@Model.Id</strong>?</p>
+        </div>
+
+        <form asp-action="DeleteUserConfirmed" method="post" class="d-flex justify-content-center gap-3 flex-wrap">
+            <input type="hidden" name="id" value="@Model.Id" />
+            <button type="submit" class="btn btn-delete-confirm">
+                <i class="bi bi-trash-fill me-1"></i> Sí, eliminar
+            </button>
+            <a asp-action="AdminDashboard" class="btn btn-cancel">
+                <i class="bi bi-x-circle me-1"></i> Cancelar
+            </a>
+        </form>
+    </div>
+</div>

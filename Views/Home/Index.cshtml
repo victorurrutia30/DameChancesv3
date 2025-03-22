@@ -1,0 +1,93 @@
+﻿@{
+    ViewData["Title"] = "HomePage";
+}
+
+<div class="homepage-bg">
+
+    <!-- Hero Section -->
+    <div class="hero-section text-center py-5">
+        <h1 class="display-4">Conectando corazones con tecnología</h1>
+        <p class="lead">Descubre conexiones auténticas, seguras y compatibles. Únete a DameChance.</p>
+        <a class="btn btn-register btn-lg" asp-controller="Account" asp-action="Registro">💗 Crear cuenta</a>
+        <p class="mt-3">
+            <a class="login-link" asp-controller="Account" asp-action="Login">¿Ya tienes cuenta? Inicia sesión</a>
+        </p>
+    </div>
+
+    <!-- Benefits Section -->
+    <div class="benefits-section py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-5" style="color:#4A4A4A;">¿Por qué elegir DameChance?</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="benefit-card text-center p-4 border rounded shadow-sm">
+                        <i class="bi bi-shield-check benefit-icon fs-1 text-primary mb-3"></i>
+                        <div class="benefit-title fw-bold mb-2">Seguridad verificada</div>
+                        <div class="benefit-text text-muted">Todos los perfiles pasan por un proceso de verificación para garantizar un entorno seguro y confiable.</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="benefit-card text-center p-4 border rounded shadow-sm">
+                        <i class="bi bi-chat-dots benefit-icon fs-1 text-primary mb-3"></i>
+                        <div class="benefit-title fw-bold mb-2">Comunicación segura</div>
+                        <div class="benefit-text text-muted">Sistema de mensajería privada que protege tu privacidad y fomenta conversaciones auténticas.</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="benefit-card text-center p-4 border rounded shadow-sm">
+                        <i class="bi bi-heart-pulse benefit-icon fs-1 text-primary mb-3"></i>
+                        <div class="benefit-title fw-bold mb-2">Compatibilidad real</div>
+                        <div class="benefit-text text-muted">Nuestro algoritmo se enfoca en gustos e intereses, no solo en la apariencia física.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Steps Section -->
+    <div class="steps-section py-5">
+        <div class="container">
+            <h2 class="text-center mb-5" style="color:#4A4A4A;">¿Cómo funciona DameChance?</h2>
+            <div class="row g-4">
+                <div class="col-md-3">
+                    <div class="step-card bg-step-lavender text-center p-4 rounded shadow-sm h-100">
+                        <i class="bi bi-person-plus-fill step-icon fs-1 mb-3"></i>
+                        <div class="step-title fw-bold">1. Regístrate</div>
+                        <div class="step-description text-muted">Crea tu perfil en minutos. Sube tus fotos y completa tus intereses.</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="step-card bg-step-blue text-center p-4 rounded shadow-sm h-100">
+                        <i class="bi bi-search-heart step-icon fs-1 mb-3"></i>
+                        <div class="step-title fw-bold">2. Encuentra afinidades</div>
+                        <div class="step-description text-muted">Explora perfiles compatibles según gustos, ubicación y valores.</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="step-card bg-step-lavender text-center p-4 rounded shadow-sm h-100">
+                        <i class="bi bi-chat-left-dots-fill step-icon fs-1 mb-3"></i>
+                        <div class="step-title fw-bold">3. Conecta y conversa</div>
+                        <div class="step-description text-muted">Envía mensajes, comparte emociones y conoce personas auténticas.</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="step-card bg-step-blue text-center p-4 rounded shadow-sm h-100">
+                        <i class="bi bi-stars step-icon fs-1 mb-3"></i>
+                        <div class="step-title fw-bold">4. Crea algo especial</div>
+                        <div class="step-description text-muted">Convierte tu conexión en algo duradero. Todo comienza con DameChance.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Call to Action Footer -->
+    <div class="cta-footer">
+        <h2>¿Y si tu historia empieza aquí?</h2>
+        <p>Haz el primer clic hacia una conexión auténtica.</p>
+        <a class="btn btn-cta" asp-controller="Account" asp-action="Registro">
+            <i class="bi bi-heart-fill me-2"></i>Crear cuenta ahora
+        </a>
+    </div>
+
+</div>

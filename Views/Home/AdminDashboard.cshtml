@@ -1,0 +1,103 @@
+﻿@model List<DameChanceSV2.Models.Usuario>
+
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="admin-dashboard-wrapper">
+
+    <h2 class="mb-4 text-center"><i class="bi bi-speedometer2 me-2"></i>Panel de Administración</h2>
+
+    <!-- Bloque 2: Resumen / Contadores -->
+    <div class="row g-3 mb-5 text-center">
+        <div class="col-md-3">
+            <div class="summary-card bg-summary-primary">
+                <i class="bi bi-people-fill summary-icon"></i>
+                <h5>Total Usuarios</h5>
+                <p>@ViewBag.Total</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="summary-card bg-summary-success">
+                <i class="bi bi-patch-check-fill summary-icon"></i>
+                <h5>Verificados</h5>
+                <p>@ViewBag.Verificados</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="summary-card bg-summary-warning">
+                <i class="bi bi-exclamation-circle-fill summary-icon"></i>
+                <h5>No Verificados</h5>
+                <p>@ViewBag.NoVerificados</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="summary-card bg-summary-danger">
+                <i class="bi bi-shield-lock-fill summary-icon"></i>
+                <h5>Administradores</h5>
+                <p>@ViewBag.Admins</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bloque 1: Listado de Usuarios Registrados + CRUD -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="mb-0">Usuarios Registrados</h4>
+        <a asp-action="CreateUser" class="btn btn-register">
+            <i class="bi bi-person-plus-fill me-1"></i> Crear Usuario
+        </a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped align-middle table-hover shadow-sm rounded-table">
+            <thead class="table-light">
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Correo</th>
+                    <th>Estado</th>
+                    <th>Rol</th>
+                    <th>Fecha Registro</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var u in Model)
+                {
+                    <tr>
+                        <td>@u.Id</td>
+                        <td>@u.Nombre</td>
+                        <td>@u.Correo</td>
+                        <td>
+                            @(u.Estado ? "✔ Verificado" : "✘ No Verificado")
+                        </td>
+                        <td>@((u.RolId == 1) ? "Admin" : "Usuario")</td>
+                        <td>@u.FechaRegistro.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>
+                            <a asp-action="EditUser" asp-route-id="@u.Id" class="btn btn-sm btn-warning me-1">
+                                <i class="bi bi-pencil-fill"></i>
+                            </a>
+                            <a asp-action="DeleteUser" asp-route-id="@u.Id" class="btn btn-sm btn-danger">
+                                <i class="bi bi-trash-fill"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Bloque 3: Panel de reportes o alertas -->
+    <div class="alert alert-info mt-4 text-center">
+        @if (ViewBag.SinVerificarMas3Dias > 0)
+        {
+            <strong>@ViewBag.SinVerificarMas3Dias cuentas</strong>
+            <span>sin verificar en más de 3 días.</span>
+        }
+        else
+        {
+            <span>No hay alertas pendientes.</span>
+        }
+    </div>
+
+</div>
